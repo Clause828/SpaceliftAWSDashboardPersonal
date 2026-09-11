@@ -103,14 +103,21 @@ output "dashboard_url" {
   value = "https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards:name=${aws_cloudwatch_dashboard.this.dashboard_name}"
 }
 
+resource "random_string" "demo_bucket_suffix" {
+  length  = 8
+  lower   = true
+  upper   = false
+  numeric = true
+  special = false
+}
+
 resource "aws_s3_bucket" "demo_bucket" {
-  bucket = "spacelift-demo-bucket-123awd456"
+  bucket = "spacelift-demo-bucket-${random_string.demo_bucket_suffix.result}"
   tags = {
     environment = var.environment
     managed_by  = "spacelift-demo"
     budget      = "10000"
     design      = "Scrum"
-    design      = "Waterfall"
     workflow    = "Waterfall"
   }
 }
